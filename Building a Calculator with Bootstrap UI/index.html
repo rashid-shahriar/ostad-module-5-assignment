@@ -29,11 +29,8 @@
               class="form-control"
               id="numberOne"
               placeholder="Enter first number"
-              oninput="validateInput()"
               required
             />
-
-            <div class="invalid-feedback">Please provide a valid number.</div>
           </div>
           <div class="col-12 col-md-4"></div>
         </div>
@@ -44,19 +41,13 @@
             <label for="operator" class="form-label">
               Please select operator</label
             >
-            <select
-              class="form-control"
-              oninput="validateInput()"
-              id="operator"
-            >
+            <select class="form-control" id="operator">
               <option value="">Select an operator</option>
-              <option value="add">Addition (+)</option>
+              <option value="addition">Addition (+)</option>
               <option value="subtract">Subtraction (-)</option>
               <option value="multiply">Multiplication (*)</option>
               <option value="divide">Division (/)</option>
             </select>
-
-            <div class="invalid-feedback">Please select an operator.</div>
           </div>
           <div class="col-12 col-md-4"></div>
         </div>
@@ -72,11 +63,8 @@
               class="form-control"
               id="numberTwo"
               placeholder="Enter first number"
-              oninput="validateInput()"
               required
             />
-
-            <div class="invalid-feedback">Please provide a valid number.</div>
           </div>
           <div class="col-12 col-md-4"></div>
         </div>

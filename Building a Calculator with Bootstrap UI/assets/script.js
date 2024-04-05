@@ -1,114 +1,80 @@
-let number_one;
-let number_two;
-let operator;
-let result_display = document.getElementById("result");
-let error_display = document.getElementById("error");
+const numberOneInput = document.getElementById("numberOne");
+const numberTwoInput = document.getElementById("numberTwo");
+const operatorSelect = document.getElementById("operator");
+const resultDisplay = document.getElementById("result");
+const errorDisplay = document.getElementById("error");
 
 //perform validation
 function validate() {
-  number_one = parseFloat(document.getElementById("numberOne").value);
-  number_two = parseFloat(document.getElementById("numberTwo").value);
-  let operator = document.getElementById("operator").value;
+  const numberOne = numberOneInput.value;
+  const numberTwo = numberTwoInput.value;
+  const operator = operatorSelect.value;
 
   // Perform client-side validation
-  if (number_one === "" || number_two === "" || operator === "") {
-    error = "Please fill in all fields";
-    error_display.classList.add("d-block");
-    error_display.classList.remove("d-none");
-  } else if (isNaN(number_one) || isNaN(number_two)) {
-    error = "Please provide a valid number";
-    error_display.classList.add("d-block");
-    error_display.classList.remove("d-none");
+  if (!numberOne || !numberTwo) {
+    displayError("Please fill in all fields");
+    return true;
+  } else if (isNaN(numberOne.trim()) || isNaN(numberTwo.trim())) {
+    displayError("Please provide a valid number");
+    return true;
   } else if (
-    operator !== "add" &&
+    operator !== "addition" &&
     operator !== "subtract" &&
     operator !== "multiply" &&
     operator !== "divide"
   ) {
-    error = "Please select a valid operator";
-    error_display.classList.add("d-block");
-    error_display.classList.remove("d-none");
-  } else if (operator === "divide" && number_two === 0) {
-    error = "Cannot divide by zero";
-    error_display.classList.add("d-block");
-    error_display.classList.remove("d-none");
+    displayError("Please select a valid operator");
+    return true;
   } else {
-    error = "";
-    error_display.classList.add("d-none");
-  }
-
-  return error;
-}
-
-//perform bootstrap validation if input field is not empty and have a number value
-function validateInput() {
-  let number_one = parseFloat(document.getElementById("numberOne").value);
-  let number_two = parseFloat(document.getElementById("numberTwo").value);
-  let operator = document.getElementById("operator").value;
-
-  if (isNaN(number_one)) {
-    document.getElementById("numberOne").classList.add("is-invalid");
-    document.getElementById("numberOne").classList.remove("is-valid");
-  } else {
-    document.getElementById("numberOne").classList.add("is-valid");
-    document.getElementById("numberOne").classList.remove("is-invalid");
-  }
-
-  if (isNaN(number_two)) {
-    document.getElementById("numberTwo").classList.add("is-invalid");
-    document.getElementById("numberTwo").classList.remove("is-valid");
-  } else {
-    document.getElementById("numberTwo").classList.add("is-valid");
-    document.getElementById("numberTwo").classList.remove("is-invalid");
-  }
-
-  if (operator === "") {
-    document.getElementById("operator").classList.add("is-invalid");
-    document.getElementById("operator").classList.remove("is-valid");
-  } else {
-    document.getElementById("operator").classList.add("is-valid");
-    document.getElementById("operator").classList.remove("is-invalid");
+    clearError();
+    return false;
   }
 }
 
 function calculate() {
-  validateInput();
-  number_one = parseFloat(document.getElementById("numberOne").value);
-  number_two = parseFloat(document.getElementById("numberTwo").value);
-  operator = document.getElementById("operator").value;
+  if (!validate()) {
+    // Only proceed if validation passes
+    const numberOne = parseFloat(numberOneInput.value);
+    const numberTwo = parseFloat(numberTwoInput.value);
+    const operator = operatorSelect.value;
+    let result;
 
-  let result;
-  let error = validate();
-
-  // If there's no error, perform calculation
-  if (!error) {
     switch (operator) {
-      case "add":
-        result = number_one + number_two;
+      case "addition":
+        result = numberOne + numberTwo;
         break;
       case "subtract":
-        result = number_one - number_two;
+        result = numberOne - numberTwo;
         break;
       case "multiply":
-        result = number_one * number_two;
+        result = numberOne * numberTwo;
         break;
       case "divide":
-        result = number_one / number_two;
+        result = numberOne / numberTwo;
+        if (numberTwo === 0) {
+          displayError("Cannot divide by zero");
+          return;
+        }
         break;
     }
+    displayResult(result);
   }
+}
 
-  //check if result is null or undefined
-  if (result === null || result === undefined) {
-    document.getElementById("result").classList.add("d-none");
-  } else {
-    document.getElementById("result").classList.remove("d-none");
-  }
+function displayError(errorMessage) {
+  errorDisplay.classList.remove("d-none");
+  errorDisplay.textContent = errorMessage;
+  resultDisplay.classList.add("d-none");
+}
 
-  // Display the result and error
-  result_display.innerHTML =
-    result !== undefined ? "Result: " + result.toFixed(2) : "";
-  error_display.innerHTML = error || "";
+function clearError() {
+  errorDisplay.classList.add("d-none");
+  errorDisplay.textContent = "";
+}
+
+function displayResult(result) {
+  resultDisplay.classList.remove("d-none");
+  resultDisplay.textContent = "Result: " + result;
 }
 
 document.getElementById("calculate_btn").addEventListener("click", calculate);
